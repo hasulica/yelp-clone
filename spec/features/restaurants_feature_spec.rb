@@ -18,24 +18,38 @@ feature 'restaurant' do
       expect(page).not_to have_content('No restaurants yet')
     end
   end
-  context 'creating restaurants' do
-    scenario 'prompt a user to fill out a form, the display the new restaurant' do
-      visit '/restaurants'
-      click_link 'Add a restaurant!'
-      fill_in 'Name', with: 'KFC'
-      click_button 'Create Restaurant'
-      expect(page).to have_content 'KFC'
-      expect(current_path).to eq '/restaurants'
-    end
 
-    context 'invalid restaurant' do
-      it 'does not allow user to submit name that is too short' do
+  context 'creating restaurants' do
+    context 'user logged in' do
+      scenario 'prompt a user to fill out a form, the display the new restaurant' do
+        login
         visit '/restaurants'
         click_link 'Add a restaurant!'
-        fill_in 'Name', with: 'kf'
+        fill_in 'Name', with: 'KFC'
         click_button 'Create Restaurant'
-        expect(page).not_to have_css 'h2', text: 'kf'
-        expect(page).to have_content 'error'
+        expect(page).to have_content 'KFC'
+        expect(current_path).to eq '/restaurants'
+      end
+
+      context 'invalid restaurant' do
+        it 'does not allow user to submit name that is too short' do
+          login
+          visit '/restaurants'
+          click_link 'Add a restaurant!'
+          fill_in 'Name', with: 'kf'
+          click_button 'Create Restaurant'
+          expect(page).not_to have_css 'h2', text: 'kf'
+          expect(page).to have_content 'error'
+        end
+      end
+    end
+
+    context 'no user logged in' do
+      scenario 'when adding restaurant, prompt to sign up or sign in' do
+        visit '/restaurants'
+        click_link 'Add a restaurant!'
+        expect(current_path).to eq '/users/sign_in'
+        expect(page).not_to have_content 'Sign out'
       end
     end
   end
