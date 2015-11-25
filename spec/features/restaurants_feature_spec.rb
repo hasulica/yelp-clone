@@ -65,26 +65,55 @@ feature 'restaurant' do
   end
 
   context 'editing restaurants' do
-    before { Restaurant.create name: 'KFC' }
+    context 'user logged in' do
+      before do
+        Restaurant.create name: 'KFC'
+        login
+      end
+      scenario 'let a user edit a restaurant' do
+        visit '/restaurants'
+        click_link 'Edit KFC'
+        fill_in 'Name', with: 'Kentucky Fried Chicken'
+        click_button 'Update Restaurant'
+        expect(page).to have_content 'Kentucky Fried Chicken'
+        expect(current_path).to eq '/restaurants'
+      end
+    end
+    context 'user not logged in' do
+      before { Restaurant.create name: 'KFC' }
 
-    scenario 'let a user edit a restaurant' do
-      visit '/restaurants'
-      click_link 'Edit KFC'
-      fill_in 'Name', with: 'Kentucky Fried Chicken'
-      click_button 'Update Restaurant'
-      expect(page).to have_content 'Kentucky Fried Chicken'
-      expect(current_path).to eq '/restaurants'
+      scenario 'let a user edit a restaurant' do
+        visit '/restaurants'
+        click_link 'Edit KFC'
+        expect(current_path).to eq '/users/sign_in'
+      end
     end
   end
 
   context 'deleting restaurants' do
-    before { Restaurant.create name: 'KFC' }
+    context 'user logged in' do
+      before do
+        Restaurant.create name: 'KFC'
+         login
+      end
 
-    scenario 'removes a restaurant when a user clicks a delete link' do
-      visit '/restaurants'
-      click_link 'Delete KFC'
-      expect(page).not_to have_content 'KFC'
-      expect(page).to have_content 'Restaurant deleted successfully'
+      scenario 'removes a restaurant when a user clicks a delete link' do
+        visit '/restaurants'
+        click_link 'Delete KFC'
+        expect(page).not_to have_content 'KFC'
+        expect(page).to have_content 'Restaurant deleted successfully'
+      end
+    end
+    context 'user not logged in' do
+      before do
+        Restaurant.create name: 'KFC'
+      end
+
+      scenario 'removes a restaurant when a user clicks a delete link' do
+        visit '/restaurants'
+        click_link 'Delete KFC'
+        expect(current_path).to eq '/users/sign_in'
+      end
     end
   end
 end
