@@ -11,7 +11,6 @@ feature 'Reviewing' do
       fill_in 'Thoughts', with: 'Okay'
       select '3', from: 'Rating'
       click_button 'Leave Review'
-
       expect(current_path).to eq '/restaurants'
       expect(page).to have_content 'Okay'
     end
@@ -19,6 +18,10 @@ feature 'Reviewing' do
     scenario 'User cannot review a restaurant it has already reviewed' do
       login
       visit '/restaurants'
+      click_link 'Review Bocado'
+      fill_in 'Thoughts', with: 'Okay'
+      select '3', from: 'Rating'
+      click_button 'Leave Review'
       click_link 'Review Bocado'
       expect(current_path).to eq '/restaurants'
       expect(page).to have_content 'You already reviewed this restaurant'
