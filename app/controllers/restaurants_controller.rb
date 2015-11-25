@@ -46,11 +46,4 @@ class RestaurantsController < ApplicationController
     flash[:notice] = 'Restaurant deleted successfully'
     redirect_to '/restaurants'
   end
-
-  def build_review review_params, current_user
-    @restaurant = Restaurant.find(params[:id])
-    @restaurant.reviews.new(review_params)
-    @restaurant.reviews.last["user_id"] = current_user.id
-    @restaurant.reviews.last
-  end
 end
