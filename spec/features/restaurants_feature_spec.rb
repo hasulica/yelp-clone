@@ -47,9 +47,8 @@ feature 'restaurant' do
     context 'no user logged in' do
       scenario 'when adding restaurant, prompt to sign up or sign in' do
         visit '/restaurants'
-        click_link 'Add a restaurant!'
+        click_link 'Add a restaurant'
         expect(current_path).to eq '/users/sign_in'
-        expect(page).not_to have_content 'Sign out'
       end
     end
   end
@@ -84,8 +83,7 @@ feature 'restaurant' do
 
       scenario 'let a user edit a restaurant' do
         visit '/restaurants'
-        click_link 'Edit KFC'
-        expect(current_path).to eq '/users/sign_in'
+        expect(page).not_to have_css 'a', text: 'Edit KFC' 
       end
     end
   end
@@ -111,8 +109,7 @@ feature 'restaurant' do
 
       scenario 'removes a restaurant when a user clicks a delete link' do
         visit '/restaurants'
-        click_link 'Delete KFC'
-        expect(current_path).to eq '/users/sign_in'
+        expect(page).not_to have_css 'a', text: 'Delete KFC'
       end
     end
   end

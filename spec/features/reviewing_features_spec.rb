@@ -22,17 +22,14 @@ feature 'Reviewing' do
       fill_in 'Thoughts', with: 'Okay'
       select '3', from: 'Rating'
       click_button 'Leave Review'
-      click_link 'Review Bocado'
-      expect(current_path).to eq '/restaurants'
-      expect(page).to have_content 'You already reviewed this restaurant'
+      expect(page).to_not have_content 'Review Bocado'
     end
   end
 
   context 'User not logged in' do
     scenario 'Cannot review a restaurant' do
       visit '/restaurants'
-      click_link 'Review Bocado'
-      expect(current_path).to eq '/users/sign_in'
+      expect(page).not_to have_css 'a', text: 'Review Bocado'
     end
   end
 end
