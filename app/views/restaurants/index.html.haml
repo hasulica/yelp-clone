@@ -1,5 +1,5 @@
 - if user_signed_in?
-  = link_to 'Sign out', destroy_user_session_path, method: :delete 
+  = link_to 'Sign out', destroy_user_session_path, method: :delete
 - else
   = link_to 'Sign in', new_user_session_path
   = link_to 'Sign up', new_user_registration_path
@@ -20,6 +20,7 @@
           = review.thoughts
           %strong= review.rating
           \/5
+      %h3 Average rating: #{restaurant.average_rating.to_i}    
     - else
       %p No reviews
 - else
