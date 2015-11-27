@@ -22,7 +22,7 @@ feature 'restaurant' do
   context 'creating restaurants' do
     context 'user logged in' do
       scenario 'prompt a user to fill out a form, the display the new restaurant' do
-        login
+        login('test@test.com')
         visit '/restaurants'
         click_link 'Add a restaurant!'
         fill_in 'Name', with: 'KFC'
@@ -33,7 +33,7 @@ feature 'restaurant' do
 
       context 'invalid restaurant' do
         it 'does not allow user to submit name that is too short' do
-          login
+          login('test@test.com')
           visit '/restaurants'
           click_link 'Add a restaurant!'
           fill_in 'Name', with: 'kf'
@@ -67,7 +67,7 @@ feature 'restaurant' do
     context 'user logged in' do
       before do
         Restaurant.create name: 'KFC'
-        login
+        login('test@test.com')
       end
       scenario 'let a user edit a restaurant' do
         visit '/restaurants'
@@ -83,7 +83,7 @@ feature 'restaurant' do
 
       scenario 'let a user edit a restaurant' do
         visit '/restaurants'
-        expect(page).not_to have_css 'a', text: 'Edit KFC' 
+        expect(page).not_to have_css 'a', text: 'Edit KFC'
       end
     end
   end
@@ -92,7 +92,7 @@ feature 'restaurant' do
     context 'user logged in' do
       before do
         Restaurant.create name: 'KFC'
-         login
+        login('test@test.com')
       end
 
       scenario 'removes a restaurant when a user clicks a delete link' do

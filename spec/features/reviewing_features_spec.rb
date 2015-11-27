@@ -5,7 +5,7 @@ feature 'Reviewing' do
 
   context 'User logged in' do
     scenario 'Allow users to leave a review using a form' do
-      login
+      login('test@test.com')
       visit '/restaurants'
       click_link 'Review Bocado'
       fill_in 'Thoughts', with: 'Okay'
@@ -16,7 +16,7 @@ feature 'Reviewing' do
     end
 
     scenario 'User cannot review a restaurant it has already reviewed' do
-      login
+      login('test@test.com')
       visit '/restaurants'
       click_link 'Review Bocado'
       fill_in 'Thoughts', with: 'Okay'
@@ -24,6 +24,16 @@ feature 'Reviewing' do
       click_button 'Leave Review'
       expect(page).to_not have_content 'Review Bocado'
     end
+  end
+
+  scenario 'displays an average rating for all reviews' do
+    login('test@test.com')
+    leave_review('So so', '3')
+    click_link('Sign out')
+
+    login('test2@test.com')
+    leave_review('Great', '5')
+    expect(page).to have_content('Average rating: 4')
   end
 
   context 'User not logged in' do
